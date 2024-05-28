@@ -1,0 +1,1431 @@
+
+#include <LiquidCrystal.h>  
+LiquidCrystal lcd(8, 9, 4, 5, 6, 7); 
+
+
+ int porta;
+ String botao;
+ int estado = 1;
+ int ponto = 0;
+ boolean flag = false;
+ int aux = 0; 
+
+
+
+void setup()   {  
+  lcd.begin(16, 2); 
+}  
+
+void loop()  { 
+
+  switch (estado) {
+
+    case 1: 
+            ponto = 0;
+            
+            lcd.clear();
+            lcd.home();  
+            lcd.print("Bem vindo ao"); 
+            lcd.setCursor(0,1);  
+            lcd.print("JOGO QUIZ RACIAL!"); 
+            
+            delay (3000);
+            
+            lcd.clear();
+            lcd.home();  
+            lcd.print("DESENVOLVIDO POR"); 
+            lcd.setCursor(0,1);  
+            lcd.print("GRUPO 13!"); 
+             
+            delay (3000); 
+     
+            lcd.clear();
+            lcd.home();  
+            lcd.print(" Use as Teclas"); 
+            lcd.setCursor(0,1);  
+            lcd.print("   UP e DOWN");
+             
+
+            delay (3000);
+    
+    		lcd.clear();
+            lcd.home();  
+            lcd.print("Para escolher a"); 
+            lcd.setCursor(0,1);  
+            lcd.print("resposta correta"); 
+
+            delay (3000);
+    
+    		lcd.clear();
+            lcd.home();  
+            lcd.print("E a tecla LEFT"); 
+            lcd.setCursor(0,1);  
+            lcd.print("para retornar");
+    
+    		delay (3000);
+    
+    		lcd.clear();
+            lcd.home();  
+            lcd.print("Tecle SELECT p/"); 
+            lcd.setCursor(0,1);  
+            lcd.print("   confirmar"); 
+
+            delay (3000);
+    
+    		lcd.clear();
+            lcd.home();  
+            lcd.print("Iniciando o Jogo"); 
+            lcd.setCursor(0,1);  
+            lcd.print("   Boa Sorte!"); 
+
+            delay (3000);
+
+            estado = 2;
+
+            break;
+         
+    case 2: 
+            lcd.clear();
+            lcd.home();  
+            lcd.print("Precione Select "); 
+            lcd.setCursor(0,1);  
+            lcd.print("Para inciar JOGO"); 
+
+            porta = analogRead (0);
+            lcd_Shield();
+
+            if (botao == "Select"){
+              estado = 3;
+            }
+
+            else if (botao != "vazio"){
+              tecla_Error();
+            }
+    
+    		delay (200);
+
+            break;
+ 
+    case 3: 
+            lcd.clear();
+            lcd.home();  
+            lcd.print("Quiz 1:"); 
+            lcd.setCursor(0,1);  
+            lcd.print("EM QUAL ANO FOI A LEI AUREA ENTROU EM VIGOR?"); 
+            
+    		delay (2000);
+    
+            for(int cont=0; cont <15; cont++){
+    			lcd.scrollDisplayLeft();
+    			delay (200); 
+  			}
+    		
+    		delay (2000);
+    
+    		lcd.clear();
+            lcd.home();  
+            lcd.print("1888l ()"); 
+            lcd.setCursor(0,1);  
+            lcd.print("1788 ()");
+    		
+    		delay (200);
+    		estado = 4;
+    		aux =0; 
+    
+    		break;
+    
+    case 4:
+            porta = analogRead (0);
+            lcd_Shield();
+
+            if (botao == "Cima"){
+              
+              lcd.clear();
+              lcd.home();  
+              lcd.print("1888 (X)"); 
+              lcd.setCursor(0,1);  
+              lcd.print("1788 ()");
+              
+              flag = true;
+              aux++;
+
+            }
+
+            else if (botao == "Baixo"){
+              
+              lcd.clear();
+              lcd.home();  
+              lcd.print("1888 ()"); 
+              lcd.setCursor(0,1);  
+              lcd.print("1788 (X)");
+              
+              flag = false;
+              aux++;
+              
+            }
+    
+    		else if (botao == "Select"){
+              if (aux !=0){
+                if(flag == true){
+                  lcd.clear();
+              	  lcd.home();  
+                  lcd.print("Acertouuu!!!"); 
+                  lcd.setCursor(0,1);  
+                  lcd.print("sabe dmss");
+                  
+                  ponto++;
+                  estado = 5;	
+                  delay (3000);
+                }
+                
+                if(flag == false){
+                  lcd.clear();
+              	  lcd.home();  
+                  lcd.print("Errou"); 
+                  lcd.setCursor(0,1);  
+                  lcd.print("ESTUDE MAIS!");
+                  
+                  estado = 5;	
+                  delay (3000);
+                }
+              }
+              
+              else{
+                lcd.clear();
+                lcd.home();  
+                lcd.print("  Poxa!"); 
+                lcd.setCursor(0,1);  
+                lcd.print("Era facil!!!");
+                
+				estado = 5;	
+                delay (3000);
+              }
+            }
+    
+    		else if (botao == "Esquerda"){
+              estado = 3;
+            }
+
+            else if (botao != "vazio"){
+              tecla_Error();
+            }
+
+            break;
+
+   
+    case 5: 
+            lcd.clear();
+            lcd.home();  
+            lcd.print("Total: "); 
+            lcd.setCursor(7,0);  
+            lcd.print(ponto); 
+            lcd.setCursor(9,0);  
+            lcd.print("Pto");
+
+            if (ponto >= 1){
+              lcd.setCursor(0,1);  
+              lcd.print("Meus parabeeens");
+            }
+
+            if (ponto < 1){
+              lcd.setCursor(0,1);  
+              lcd.print("tenta outra ");
+              } 
+               delay (3000);
+              estado = 6;
+    
+         break;
+    
+     case 6: 
+            lcd.clear();
+            lcd.home();  
+            lcd.print("Quiz 2:"); 
+            lcd.setCursor(0,1);  
+            lcd.print("Qual foi o maior autor negro?"); 
+            
+    		delay (2000);
+    
+            for(int cont=0; cont <19; cont++){
+    			lcd.scrollDisplayLeft();
+    			delay (200); 
+  			}
+    		
+    		delay (2000);
+    
+    		lcd.clear();
+            lcd.home();  
+            lcd.print("Machado de assis ()"); 
+            lcd.setCursor(0,1);  
+            lcd.print("Castro Alves ()");
+    		
+    		delay (200);
+    		estado = 7;
+    		aux =0; 
+    
+    		break;
+    
+    case 7:
+            porta = analogRead (0);
+            lcd_Shield();
+
+            if (botao == "Cima"){
+              
+              lcd.clear();
+              lcd.home();  
+              lcd.print("Machado de Assis (X)"); 
+              lcd.setCursor(0,1);  
+              lcd.print("Castro Alves ()");
+              
+              flag = true;
+              aux++;
+
+            }
+
+            else if (botao == "Baixo"){
+              
+              lcd.clear();
+              lcd.home();  
+              lcd.print("Machado de Assis ()"); 
+              lcd.setCursor(0,1);  
+              lcd.print("Castro Alves (X)");
+              
+              flag = false;
+              aux++;
+              
+            }
+    
+    		else if (botao == "Select"){
+              if (aux !=0){
+                if(flag == true){
+                  lcd.clear();
+              	  lcd.home();  
+                  lcd.print("Acertouu!"); 
+                  lcd.setCursor(0,1);  
+                  lcd.print("Muito QI!");
+                  
+                  ponto++;
+                  estado = 8;	
+                  delay (3000);
+                }
+                
+                if(flag == false){
+                  lcd.clear();
+              	  lcd.home();  
+                  lcd.print("Errooouuuu!!!"); 
+                  lcd.setCursor(0,1);  
+                  lcd.print("SE ESFORCE MAIS");
+                  
+                  estado = 8;	
+                  delay (3000);
+                }
+              }
+              
+              else{
+                lcd.clear();
+                lcd.home();  
+                lcd.print("Que penaaa!!"); 
+                lcd.setCursor(0,1);  
+                lcd.print("Era muito facil!!!");
+                
+				estado = 8;	
+                delay (3000);
+              }
+            }
+    
+    		else if (botao == "Esquerda"){
+              estado = 3;
+            }
+
+            else if (botao != "vazio"){
+              tecla_Error();
+            }
+
+            break;
+
+    case 8: 
+            lcd.clear();
+            lcd.home();  
+            lcd.print("Total: "); 
+            lcd.setCursor(7,0);  
+            lcd.print(ponto); 
+            lcd.setCursor(9,0);  
+            lcd.print("Pto");
+
+            if (ponto >= 1){
+              lcd.setCursor(0,1);  
+              lcd.print("Meus parabens");
+            }
+
+            if (ponto < 1){
+              lcd.setCursor(0,1);  
+              lcd.print("tente outra ");
+              } 
+               delay (3000);
+              estado = 9;
+    
+
+            break;
+    
+     case 9: 
+            lcd.clear();
+            lcd.home();  
+            lcd.print("Quiz 3:"); 
+            lcd.setCursor(0,1);  
+            lcd.print("Quem era conhecido como Rei do Pop?"); 
+            
+    		delay (2000);
+    
+            for(int cont=0; cont <20; cont++){
+    			lcd.scrollDisplayLeft();
+    			delay (200); 
+  			}
+    		
+    		delay (2000);
+    
+    		lcd.clear();
+            lcd.home();  
+            lcd.print("Michael Jackson ()"); 
+            lcd.setCursor(0,1);  
+            lcd.print("Steve Jobs ()");
+    		
+    		delay (200);
+    		estado = 10;
+    		aux =0; 
+    
+    		break;
+    
+    case 10:
+            porta = analogRead (0);
+            lcd_Shield();
+
+            if (botao == "Cima"){
+              
+              lcd.clear();
+              lcd.home();  
+              lcd.print("Michael Jackson (X)"); 
+              lcd.setCursor(0,1);  
+              lcd.print("Steve Jobs ()");
+              
+              flag = true;
+              aux++;
+
+            }
+
+            else if (botao == "Baixo"){
+              
+              lcd.clear();
+              lcd.home();  
+              lcd.print("Michael Jackson()"); 
+              lcd.setCursor(0,1);  
+              lcd.print("Steve Jobs (X)");
+              
+              flag = false;
+              aux++;
+              
+            }
+    
+    		else if (botao == "Select"){
+              if (aux !=0){
+                if(flag == true){
+                  lcd.clear();
+              	  lcd.home();  
+                  lcd.print("Acertou - Uhuu!"); 
+                  lcd.setCursor(0,1);  
+                  lcd.print("Sabe muito!");
+                  
+                  ponto++;
+                  estado = 11;	
+                  delay (3000);
+                }
+                
+                if(flag == false){
+                  lcd.clear();
+              	  lcd.home();  
+                  lcd.print("Errooouuuuu!!!"); 
+                  lcd.setCursor(0,1);  
+                  lcd.print("que pena");
+                  
+                  estado = 11;	
+                  delay (3000);
+                }
+              }
+              
+              else{
+                lcd.clear();
+                lcd.home();  
+                lcd.print("Que penaaa!!"); 
+                lcd.setCursor(0,1);  
+                lcd.print("Era muito facil!!!");
+                
+				estado = 11;	
+                delay (3000);
+              }
+            }
+    
+    		else if (botao == "Esquerda"){
+              estado = 3;
+            }
+
+            else if (botao != "vazio"){
+              tecla_Error();
+            }
+
+            break;
+
+    case 11: 
+            lcd.clear();
+            lcd.home();  
+            lcd.print("Total: "); 
+            lcd.setCursor(7,0);  
+            lcd.print(ponto); 
+            lcd.setCursor(9,0);  
+            lcd.print("Pto");
+
+            if (ponto >= 1){
+              lcd.setCursor(0,1);  
+              lcd.print("Meus parabeeens");
+            }
+
+            if (ponto < 1){
+              lcd.setCursor(0,1);  
+              lcd.print("tente outra ");
+              } 
+               delay (3000);
+              estado = 12;
+              
+           break;
+//	Questão 4----------------------------------------------------------    
+     case 12: 
+            lcd.clear();
+            lcd.home();  
+            lcd.print("Quiz 4:"); 
+            lcd.setCursor(0,1);  
+            lcd.print("Qual e o maior pais do mundo?"); 
+            
+    		delay (2000);
+    
+            for(int cont=0; cont <14; cont++){
+    			lcd.scrollDisplayLeft();
+    			delay (200); 
+  			}
+    		
+    		delay (2000);
+    
+    		lcd.clear();
+            lcd.home();  
+            lcd.print("Russia ()");
+    
+            lcd.setCursor(0,1);
+    
+            lcd.print("China ()");
+    		
+    		delay (200);
+    		estado = 13;
+    		aux =0; 
+    
+    		break;
+    
+    case 13:
+            porta = analogRead (0);
+            lcd_Shield();
+
+            if (botao == "Cima"){
+              
+              lcd.clear();
+              lcd.home();  
+              lcd.print("Russia (X)"); 
+              lcd.setCursor(0,1);  
+              lcd.print("China ()");
+              
+              flag = true;
+              aux++;
+
+            }
+
+            else if (botao == "Baixo"){
+              
+              lcd.clear();
+              lcd.home();  
+              lcd.print("Russia ()"); 
+              lcd.setCursor(0,1);  
+              lcd.print("China (X)");
+              
+              flag = false;
+              aux++;
+              
+            }
+    
+    		else if (botao == "Select"){
+              if (aux !=0){
+                if(flag == true){
+                  lcd.clear();
+              	  lcd.home();  
+                  lcd.print("Acertou - Uhuu!"); 
+                  lcd.setCursor(0,1);  
+                  lcd.print("Muito Bom!");
+                  
+                  ponto++;
+                  estado = 14;	
+                  delay (3000);
+                }
+                
+                if(flag == false){
+                  lcd.clear();
+              	  lcd.home();  
+                  lcd.print("Errooouuuuu!!!"); 
+                  lcd.setCursor(0,1);  
+                  lcd.print("que pena");
+                  
+                  estado = 14;	
+                  delay (3000);
+                }
+              }
+              
+              else{
+                lcd.clear();
+                lcd.home();  
+                lcd.print("Que penaaa!!"); 
+                lcd.setCursor(0,1);  
+                lcd.print("Era muito facil!!!");
+                
+				estado =14;	
+                delay (3000);
+              }
+            }
+    
+    		else if (botao == "Esquerda"){
+              estado = 3;
+            }
+
+            else if (botao != "vazio"){
+              tecla_Error();
+            }
+
+            break;
+
+    case 14: 
+            lcd.clear();
+            lcd.home();  
+            lcd.print("Total: "); 
+            lcd.setCursor(7,0);  
+            lcd.print(ponto); 
+            lcd.setCursor(9,0);  
+            lcd.print("Pto");
+
+            if (ponto >= 1){
+              lcd.setCursor(0,1);  
+              lcd.print("Meus parabeeens");
+            }
+
+            if (ponto < 1){
+              lcd.setCursor(0,1);  
+              lcd.print("tente outra ");
+              } 
+               delay (3000);
+              estado = 15;
+         break;
+    
+  // Questão 5--------------------------------------------------
+    
+     case 15:
+    
+            lcd.clear();
+            lcd.home();  
+            lcd.print("Quiz 5:"); 
+            lcd.setCursor(0,1);  
+            lcd.print("Qual e o unico mamifero que voa?"); 
+            
+    		delay (2000);
+    
+            for(int cont=0; cont <17; cont++){
+    			lcd.scrollDisplayLeft();
+    			delay (200); 
+  			}
+    		
+    		delay (2000);
+    
+    		lcd.clear();
+            lcd.home();  
+            lcd.print("Morcego ()"); 
+            lcd.setCursor(0,1);  
+            lcd.print("Coruja ()");
+    		
+    		delay (200);
+    		estado = 16;
+    		aux =0; 
+    
+    		break;
+    
+    case 16:
+            porta = analogRead (0);
+            lcd_Shield();
+
+            if (botao == "Cima"){
+              
+              lcd.clear();
+              lcd.home();  
+              lcd.print("Morcego (X)"); 
+              lcd.setCursor(0,1);  
+              lcd.print("Coruja ()");
+              
+              flag = true;
+              aux++;
+
+            }
+
+            else if (botao == "Baixo"){
+              
+              lcd.clear();
+              lcd.home();  
+              lcd.print("Morcego ()"); 
+              lcd.setCursor(0,1);  
+              lcd.print("Coruja (X)");
+              
+              flag = false;
+              aux++;
+              
+            }
+    
+    		else if (botao == "Select"){
+              if (aux !=0){
+                if(flag == true){
+                  lcd.clear();
+              	  lcd.home();  
+                  lcd.print("Acertou - Uhuu!"); 
+                  lcd.setCursor(0,1);  
+                  lcd.print("QI de mais!");
+                  
+                  ponto++;
+                  estado = 17;	
+                  delay (3000);
+                }
+                
+                if(flag == false){
+                  lcd.clear();
+              	  lcd.home();  
+                  lcd.print("Errooouuuuu!!!"); 
+                  lcd.setCursor(0,1);  
+                  lcd.print("que pena");
+                  
+                  estado = 17;	
+                  delay (3000);
+                }
+              }
+              
+              else{
+                lcd.clear();
+                lcd.home();  
+                lcd.print("Que penaaa!!"); 
+                lcd.setCursor(0,1);  
+                lcd.print("Era muito facil!!!");
+                
+				estado = 17;	
+                delay (3000);
+              }
+            }
+    
+    		else if (botao == "Esquerda"){
+              estado = 3;
+            }
+
+            else if (botao != "vazio"){
+              tecla_Error();
+            }
+
+            break;
+
+    case 17: 
+            lcd.clear();
+            lcd.home();  
+            lcd.print("Total: "); 
+            lcd.setCursor(7,0);  
+            lcd.print(ponto); 
+            lcd.setCursor(9,0);  
+            lcd.print("Pto");
+
+            if (ponto >= 1){
+              lcd.setCursor(0,1);  
+              lcd.print("Meus parabeeens");
+            }
+
+            if (ponto < 1){
+              lcd.setCursor(0,1);  
+              lcd.print("tente outra ");
+              } 
+               delay (3000);
+              estado = 18;
+             break;
+// Questão 6----------------------------------------------------------------------------    
+     case 18: 
+            lcd.clear();
+            lcd.home();  
+            lcd.print("Quiz 6:"); 
+            lcd.setCursor(0,1);  
+            lcd.print("Em que ano o homem pisou na lua?"); 
+            
+    		delay (2000);
+    
+            for(int cont=0; cont <17; cont++){
+    			lcd.scrollDisplayLeft();
+    			delay (200); 
+  			}
+    		
+    		delay (2000);
+    
+    		lcd.clear();
+            lcd.home();  
+            lcd.print("1969 ()"); 
+            lcd.setCursor(0,1);  
+            lcd.print("1945 ()");
+    		
+    		delay (200);
+    		estado = 19;
+    		aux =0; 
+    
+    		break;
+    
+    case 19:
+            porta = analogRead (0);
+            lcd_Shield();
+
+            if (botao == "Cima"){
+              
+              lcd.clear();
+              lcd.home();  
+              lcd.print("1969 (X)"); 
+              lcd.setCursor(0,1);  
+              lcd.print("1945 ()");
+              
+              flag = true;
+              aux++;
+
+            }
+
+            else if (botao == "Baixo"){
+              
+              lcd.clear();
+              lcd.home();  
+              lcd.print("1969 ()"); 
+              lcd.setCursor(0,1);  
+              lcd.print("1945 (X)");
+              
+              flag = false;
+              aux++;
+              
+            }
+    
+    		else if (botao == "Select"){
+              if (aux !=0){
+                if(flag == true){
+                  lcd.clear();
+              	  lcd.home();  
+                  lcd.print("Acertou - Uhuu!"); 
+                  lcd.setCursor(0,1);  
+                  lcd.print("Sabe muito!");
+                  
+                  ponto++;
+                  estado = 20;	
+                  delay (3000);
+                }
+                
+                if(flag == false){
+                  lcd.clear();
+              	  lcd.home();  
+                  lcd.print("Errooouuuuu!!!"); 
+                  lcd.setCursor(0,1);  
+                  lcd.print("que pena");
+                  
+                  estado = 20;	
+                  delay (3000);
+                }
+              }
+              
+              else{
+                lcd.clear();
+                lcd.home();  
+                lcd.print("Que penaaa!!"); 
+                lcd.setCursor(0,1);  
+                lcd.print("Era muito facil!!!");
+                
+				estado = 20;	
+                delay (3000);
+              }
+            }
+    
+    		else if (botao == "Esquerda"){
+              estado = 3;
+            }
+
+            else if (botao != "vazio"){
+              tecla_Error();
+            }
+
+            break;
+  
+    case 20: 
+            lcd.clear();
+            lcd.home();  
+            lcd.print("Total: "); 
+            lcd.setCursor(7,0);  
+            lcd.print(ponto); 
+            lcd.setCursor(9,0);  
+            lcd.print("Pto");
+
+            if (ponto >= 1){
+              lcd.setCursor(0,1);  
+              lcd.print("Meus parabeeens");
+            }
+
+            if (ponto < 1){
+              lcd.setCursor(0,1);  
+              lcd.print("tente outra ");
+              } 
+               delay (3000);
+              estado = 21;
+              break;
+    //QUESTÃO 7-----------------------------------------------------------
+   case 21: 
+            lcd.clear();
+            lcd.home();  
+            lcd.print("Quiz 7:"); 
+            lcd.setCursor(0,1);  
+            lcd.print("Quantas teclas tem um piano?"); 
+            
+    		delay (2000);
+    
+            for(int cont=0; cont <13; cont++){
+    			lcd.scrollDisplayLeft();
+    			delay (200); 
+  			}
+    		
+    		delay (2000);
+    
+    		lcd.clear();
+            lcd.home();  
+            lcd.print("88 ()"); 
+            lcd.setCursor(0,1);  
+            lcd.print("87 ()");
+    		
+    		delay (200);
+    		estado = 22;
+    		aux =0; 
+    
+    		break;
+    
+    case 22:
+            porta = analogRead (0);
+            lcd_Shield();
+
+            if (botao == "Cima"){
+              
+              lcd.clear();
+              lcd.home();  
+              lcd.print("88 (X)"); 
+              lcd.setCursor(0,1);  
+              lcd.print("87 ()");
+              
+              flag = true;
+              aux++;
+
+            }
+
+            else if (botao == "Baixo"){
+              
+              lcd.clear();
+              lcd.home();  
+              lcd.print("88 ()"); 
+              lcd.setCursor(0,1);  
+              lcd.print("87 (X)");
+              
+              flag = false;
+              aux++;
+              
+            }
+    
+    		else if (botao == "Select"){
+              if (aux !=0){
+                if(flag == true){
+                  lcd.clear();
+              	  lcd.home();  
+                  lcd.print("Acertou - Uhuu!"); 
+                  lcd.setCursor(0,1);  
+                  lcd.print("!");
+                  
+                  ponto++;
+                  estado = 23;	
+                  delay (3000);
+                }
+                
+                if(flag == false){
+                  lcd.clear();
+              	  lcd.home();  
+                  lcd.print("Errooouuuuu!!!"); 
+                  lcd.setCursor(0,1);  
+                  lcd.print("só no sonho");
+                  
+                  estado = 23;	
+                  delay (3000);
+                }
+              }
+              
+              else{
+                lcd.clear();
+                lcd.home();  
+                lcd.print("Que penaaa!!"); 
+                lcd.setCursor(0,1);  
+                lcd.print("Era muito facil!!!");
+                
+				estado = 23;	
+                delay (3000);
+              }
+            }
+    
+    		else if (botao == "Esquerda"){
+              estado = 3;
+            }
+
+            else if (botao != "vazio"){
+              tecla_Error();
+            }
+
+            break;
+
+    case 23: 
+            lcd.clear();
+            lcd.home();  
+            lcd.print("Total: "); 
+            lcd.setCursor(7,0);  
+            lcd.print(ponto); 
+            lcd.setCursor(9,0);  
+            lcd.print("Pto");
+
+            if (ponto >= 1){
+              lcd.setCursor(0,1);  
+              lcd.print("top");
+            }
+
+            if (ponto < 1){
+              lcd.setCursor(0,1);  
+              lcd.print("tente outra ");
+              } 
+               delay (3000);
+              estado = 24;
+            break;
+  //QUESTÃO 8-----------------------------------------------------------
+  
+   case 24: 
+            lcd.clear();
+            lcd.home();  
+            lcd.print("Quiz 8:"); 
+            lcd.setCursor(0,1);  
+            lcd.print("Qual e o menor pais do mundo?"); 
+            
+    		delay (2000);
+    
+            for(int cont=0; cont <14; cont++){
+    			lcd.scrollDisplayLeft();
+    			delay (200); 
+  			}
+    		
+    		delay (2000);
+    
+    		lcd.clear();
+            lcd.home();  
+            lcd.print("Vaticano ()"); 
+            lcd.setCursor(0,1);  
+            lcd.print("Andorra ()");
+    		
+    		delay (200);
+    		estado = 25;
+    		aux =0; 
+    
+    		break;
+    
+    case 25:
+            porta = analogRead (0);
+            lcd_Shield();
+
+            if (botao == "Cima"){
+              
+              lcd.clear();
+              lcd.home();  
+              lcd.print("Vaticano (X)"); 
+              lcd.setCursor(0,1);  
+              lcd.print("Andorra()");
+              
+              flag = true;
+              aux++;
+
+            }
+
+            else if (botao == "Baixo"){
+              
+              lcd.clear();
+              lcd.home();  
+              lcd.print("Vaticano ()"); 
+              lcd.setCursor(0,1);  
+              lcd.print("Andorra (X)");
+              
+              flag = false;
+              aux++;
+              
+            }
+    
+    		else if (botao == "Select"){
+              if (aux !=0){
+                if(flag == true){
+                  lcd.clear();
+              	  lcd.home();  
+                  lcd.print("Acertou - Uhuu!"); 
+                  lcd.setCursor(0,1);  
+                  lcd.print("Sabe D+!");
+                  
+                  ponto++;
+                  estado = 26;	
+                  delay (3000);
+                }
+                
+                if(flag == false){
+                  lcd.clear();
+              	  lcd.home();  
+                  lcd.print("Errooouuuuu!!!"); 
+                  lcd.setCursor(0,1);  
+                  lcd.print("que triste");
+                  
+                  estado = 26;	
+                  delay (3000);
+                }
+              }
+              
+              else{
+                lcd.clear();
+                lcd.home();  
+                lcd.print("Que penaaa!!"); 
+                lcd.setCursor(0,1);  
+                lcd.print("Era facil!!!");
+                
+				estado = 26;	
+                delay (3000);
+              }
+            }
+    
+    		else if (botao == "Esquerda"){
+              estado = 3;
+            }
+
+            else if (botao != "vazio"){
+              tecla_Error();
+            }
+
+            break;
+
+    case 26: 
+            lcd.clear();
+            lcd.home();  
+            lcd.print("Total: "); 
+            lcd.setCursor(7,0);  
+            lcd.print(ponto); 
+            lcd.setCursor(9,0);  
+            lcd.print("Pto");
+
+            if (ponto >= 1){
+              lcd.setCursor(0,1);  
+              lcd.print("Meus parabeeens");
+            }
+
+            if (ponto < 1){
+              lcd.setCursor(0,1);  
+              lcd.print("tente outra ");
+              } 
+               delay (3000);
+              estado = 27;
+         break;
+    //QUESTÃO 9-----------------------------------------------------------
+    
+   case 27: 
+            lcd.clear();
+            lcd.home();  
+            lcd.print("Quiz 9:"); 
+            lcd.setCursor(0,1);  
+            lcd.print("Quantos ossos tem no corpo humano?"); 
+            
+    		delay (2000);
+    
+            for(int cont=0; cont <18; cont++){
+    			lcd.scrollDisplayLeft();
+    			delay (200); 
+  			}
+    		
+    		delay (2000);
+    
+    		lcd.clear();
+            lcd.home();  
+            lcd.print("206 ()"); 
+            lcd.setCursor(0,1);  
+            lcd.print("103 ()");
+    		
+    		delay (200);
+    		estado = 28;
+    		aux =0; 
+    
+    		break;
+    
+    case 28:
+            porta = analogRead (0);
+            lcd_Shield();
+
+            if (botao == "Cima"){
+              
+              lcd.clear();
+              lcd.home();  
+              lcd.print("206 (X)"); 
+              lcd.setCursor(0,1);  
+              lcd.print("103 ()");
+              
+              flag = true;
+              aux++;
+
+            }
+
+            else if (botao == "Baixo"){
+              
+              lcd.clear();
+              lcd.home();  
+              lcd.print("206 ()"); 
+              lcd.setCursor(0,1);  
+              lcd.print("103 (X)");
+              
+              flag = false;
+              aux++;
+              
+            }
+    
+    		else if (botao == "Select"){
+              if (aux !=0){
+                if(flag == true){
+                  lcd.clear();
+              	  lcd.home();  
+                  lcd.print("Acertou - Uhuu!"); 
+                  lcd.setCursor(0,1);  
+                  lcd.print("Sabe D+!");
+                  
+                  ponto++;
+                  estado = 29;	
+                  delay (3000);
+                }
+                
+                if(flag == false){
+                  lcd.clear();
+              	  lcd.home();  
+                  lcd.print("Errooouuuuu!!!"); 
+                  lcd.setCursor(0,1);  
+                  lcd.print("SHIII kkkk");
+                  
+                  estado = 29;	
+                  delay (3000);
+                }
+              }
+              
+              else{
+                lcd.clear();
+                lcd.home();  
+                lcd.print("Que penaaa!!"); 
+                lcd.setCursor(0,1);  
+                lcd.print("Era muito facil!!!");
+                
+				estado = 29;	
+                delay (3000);
+              }
+            }
+    
+    		else if (botao == "Esquerda"){
+              estado = 3;
+            }
+
+            else if (botao != "vazio"){
+              tecla_Error();
+            }
+
+            break;
+
+    case 29: 
+            lcd.clear();
+            lcd.home();  
+            lcd.print("Total: "); 
+            lcd.setCursor(7,0);  
+            lcd.print(ponto); 
+            lcd.setCursor(9,0);  
+            lcd.print("Pto");
+
+            if (ponto >= 1){
+              lcd.setCursor(0,1);  
+              lcd.print("Meus parabeeens");
+            }
+
+            if (ponto < 1){
+              lcd.setCursor(0,1);  
+              lcd.print("tente outra ");
+              } 
+               delay (3000);
+              estado = 30;
+              break;
+        //QUESTÃO 10-----------------------------------------------------------
+
+     case 30: 
+            lcd.clear();
+            lcd.home();  
+            lcd.print("Quiz Final:"); 
+            lcd.setCursor(0,1);  
+            lcd.print("Em qual temperatura a agua ferve?"); 
+            
+    		delay (2000);
+    
+            for(int cont=0; cont <18; cont++){
+    			lcd.scrollDisplayLeft();
+    			delay (200); 
+  			}
+    		
+    		delay (2000);
+    
+    		lcd.clear();
+            lcd.home();  
+            lcd.print("100º C ()"); 
+            lcd.setCursor(0,1);  
+            lcd.print("80º C ()");
+    		
+    		delay (200);
+    		estado = 31;
+    		aux =0; 
+    
+    		break;
+    
+    case 31:
+            porta = analogRead (0);
+            lcd_Shield();
+
+            if (botao == "Cima"){
+              
+              lcd.clear();
+              lcd.home();  
+              lcd.print("100º C (X)"); 
+              lcd.setCursor(0,1);  
+              lcd.print("80º C ()");
+              
+              flag = true;
+              aux++;
+
+            }
+
+            else if (botao == "Baixo"){
+              
+              lcd.clear();
+              lcd.home();  
+              lcd.print("100 C ()"); 
+              lcd.setCursor(0,1);  
+              lcd.print("80 C (X)");
+              
+              flag = false;
+              aux++;
+              
+            }
+    
+    		else if (botao == "Select"){
+              if (aux !=0){
+                if(flag == true){
+                  lcd.clear();
+              	  lcd.home();  
+                  lcd.print("Acertou - Tem"); 
+                  lcd.setCursor(0,1);  
+                  lcd.print("meu respeito");
+                  
+                  ponto++;
+                  estado = 32;	
+                  delay (3000);
+                }
+                
+                if(flag == false){
+                  lcd.clear();
+              	  lcd.home();  
+                  lcd.print("Errooouuuuu!!!"); 
+                  lcd.setCursor(0,1);  
+                  lcd.print("kkkk nunca");
+                  
+                  estado = 32;	
+                  delay (3000);
+                }
+              }
+              
+              else{
+                lcd.clear();
+                lcd.home();  
+                lcd.print("Que penaaa!!"); 
+                lcd.setCursor(0,1);  
+                lcd.print("Era muito facil!!!");
+                
+				estado = 32;	
+                delay (3000);
+              }
+            }
+    
+    		else if (botao == "Esquerda"){
+              estado = 3;
+            }
+
+            else if (botao != "vazio"){
+              tecla_Error();
+            }
+
+            break;
+
+    case 32: 
+            lcd.clear();
+            lcd.home();  
+            lcd.print("Total: "); 
+            lcd.setCursor(7,0);  
+            lcd.print(ponto); 
+            lcd.setCursor(9,0);  
+            lcd.print("Pto");
+
+            if (ponto >= 1){
+              lcd.setCursor(0,1);  
+              lcd.print("Resultado final");
+            }
+
+            if (ponto < 1){
+              lcd.setCursor(0,1);  
+              lcd.print("tente outra ");
+              } 
+               delay (3000);
+              estado = 33;
+           break;
+  }
+}
+  
+  
+void lcd_Shield () {
+
+   botao = "vazio";
+
+   if (porta < 100) {  
+      botao = "Direita";  
+   }  
+   else if (porta < 200) {  
+      botao = "Cima";  
+   }  
+   else if (porta < 400){  
+      botao = "Baixo";  
+   }  
+   else if (porta < 600){  
+      botao = "Esquerda";  
+   }  
+   else if (porta < 800){  
+      botao = "Select";  
+   } 
+}
+
+void tecla_Error(){
+  lcd.clear();
+  lcd.home();
+  lcd.print (" Tecla Errada!! ");
+  delay (1000); 
+}
