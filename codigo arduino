@@ -1,6 +1,8 @@
+#include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
-LiquidCrystal_I2C lcd(0x3f, 20, 4);
+LiquidCrystal_I2C lcd(0x3F, 20, 4);
+
 int confirmar = 1;
 int up = 2;
 int down = 3;
@@ -12,8 +14,14 @@ bool flag = false;
 int aux = 0;
 String botao;
 
+String escritores[] = {"FRANTZ FANON; LELIA GONZALEZ; ACHILLE MBEMBE; CIDA BENTO; SUELI CARNEIRO; UPILE CHISALA; NNEDI OKORAFOR"};
+String musicos[] = {"CASSIANO; LUEDJI LUNA; LARISSA LUZ; LINIKER; DONA IVONE LARA; LUIZ MELODIA"};
+String diretores[] = {"SABRINA FIDALGO; ADÉLIA SAMPAIO; MARLON RIGGS; MAYA ANGELOU; NIA DA COSTA"};
+int menuIndex = 0; 
+
 void setup() {
-    lcd.begin(20, 4);
+    lcd.init();
+    lcd.backlight();
     Serial.begin(9600);
     pinMode(confirmar, INPUT_PULLUP);
     pinMode(up, INPUT_PULLUP);
@@ -22,7 +30,7 @@ void setup() {
     pinMode(left, INPUT_PULLUP);
 }
 
-// Função para leitura dos botões
+
 void lerBotoes() {
     botao = "vazio";
 
@@ -39,6 +47,34 @@ void lerBotoes() {
     }
 }
 
+void mostrarMenu() {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Recomendacoes");
+
+    lcd.setCursor(0, 1);
+    if (menuIndex == 0) lcd.print("> 1. Escritores");
+    else lcd.print("1. Escritores");
+
+    lcd.setCursor(0, 2);
+    if (menuIndex == 1) lcd.print("> 2. Musicos");
+    else lcd.print("2. Musicos");
+
+    lcd.setCursor(0, 3);
+    if (menuIndex == 2) lcd.print("> 3. Diretores");
+    else lcd.print("3. Diretores");
+}
+
+void mostrarRecomendacoes(String recomendacoes[], int tamanho) {
+    lcd.clear();
+    for (int i = 0; i < tamanho; i++) {
+        lcd.setCursor(0, 0);
+        lcd.print(recomendacoes[i]);
+        delay(3000);
+        lcd.clear();
+    }
+}
+
 void loop() {
     lerBotoes();
 
@@ -50,49 +86,9 @@ void loop() {
             lcd.setCursor(0, 0);
             lcd.print("  Bem vindo ao");
             lcd.setCursor(0, 1);
-            lcd.print("   JOGO QUIZ!");
+            lcd.print("   AfroPop Quiz!");
 
-            delay(3000);
-
-            lcd.clear();
-            lcd.setCursor(0, 0);
-            lcd.print(" Use as Teclas");
-            lcd.setCursor(0, 1);
-            lcd.print("   UP e DOWN");
-
-            delay(3000);
-
-            lcd.clear();
-            lcd.setCursor(0, 0);
-            lcd.print("Para escolher a");
-            lcd.setCursor(0, 1);
-            lcd.print("resposta correta");
-
-            delay(3000);
-
-            lcd.clear();
-            lcd.setCursor(0, 0);
-            lcd.print("E a tecla LEFT");
-            lcd.setCursor(0, 1);
-            lcd.print("para retornar");
-
-            delay(3000);
-
-            lcd.clear();
-            lcd.setCursor(0, 0);
-            lcd.print("Tecle SELECT p/");
-            lcd.setCursor(0, 1);
-            lcd.print("   confirmar");
-
-            delay(3000);
-
-            lcd.clear();
-            lcd.setCursor(0, 0);
-            lcd.print("Iniciando o Jogo");
-            lcd.setCursor(0, 1);
-            lcd.print("   Boa Sorte!");
-
-            delay(3000);
+            delay(30); // delay 3000
 
             estado = 2;
 
@@ -101,7 +97,7 @@ void loop() {
         case 2:
             lcd.clear();
             lcd.setCursor(0, 0);
-            lcd.print("Precione Select ");
+            lcd.print("Pressione Select ");
             lcd.setCursor(0, 1);
             lcd.print("Para iniciar JOGO");
 
@@ -117,24 +113,24 @@ void loop() {
         case 110:
             lcd.clear();
             lcd.setCursor(0, 0);
-            lcd.print("Quiz 1:");
+            lcd.print("Q1: O que foram os");
             lcd.setCursor(0, 1);
-            lcd.print("O Cobra Kai eh um estilo de luta do(a):");
+            lcd.print("Panteras Negras");
+            lcd.setCursor(0, 2);
+            lcd.print("nos EUA?");
 
-            delay(2000);
-
-            for (int cont = 0; cont < 23; cont++) {
-                lcd.scrollDisplayLeft();
-                delay(200);
-            }
-
-            delay(2000);
+            delay(6000);
 
             lcd.clear();
             lcd.setCursor(0, 0);
-            lcd.print("Karate ()");
+            lcd.print("() Mov. cultural");
             lcd.setCursor(0, 1);
-            lcd.print("Capoeira ()");
+            lcd.print("ligado ao afrobeats");
+
+            lcd.setCursor(0, 2);
+            lcd.print("() Partido pela auto");
+            lcd.setCursor(0, 3);
+            lcd.print("defesa negra");
 
             delay(200);
             estado = 111;
@@ -148,21 +144,31 @@ void loop() {
             if (botao == "Cima") {
                 lcd.clear();
                 lcd.setCursor(0, 0);
-                lcd.print("Karate (X)");
+                lcd.print("(X) Mov. cultural");
                 lcd.setCursor(0, 1);
-                lcd.print("Capoeira ()");
+                lcd.print("ligado ao afrobeats");
 
-                flag = true;
+                lcd.setCursor(0, 2);
+                lcd.print("() Partido pela auto");
+                lcd.setCursor(0, 3);
+                lcd.print("defesa negra");
+
+                flag = false;
                 aux++;
 
             } else if (botao == "Baixo") {
                 lcd.clear();
                 lcd.setCursor(0, 0);
-                lcd.print("Karate ()");
+                lcd.print("() Mov. cultural");
                 lcd.setCursor(0, 1);
-                lcd.print("Capoeira (X)");
+                lcd.print("ligado ao afrobeats");
 
-                flag = false;
+                lcd.setCursor(0, 2);
+                lcd.print("(X) Partido pela auto");
+                lcd.setCursor(0, 3);
+                lcd.print("defesa negra");
+
+                flag = true;
                 aux++;
 
             } else if (botao == "Select") {
@@ -170,9 +176,7 @@ void loop() {
                     if (flag == true) {
                         lcd.clear();
                         lcd.setCursor(0, 0);
-                        lcd.print("Acertou - Uhuu!");
-                        lcd.setCursor(0, 1);
-                        lcd.print("Tem Netflix neh");
+                        lcd.print("Acertou!"); 
 
                         ponto++;
                         estado = 120;
@@ -182,25 +186,12 @@ void loop() {
                     if (flag == false) {
                         lcd.clear();
                         lcd.setCursor(0, 0);
-                        lcd.print("Errooouuuuu!!!");
-                        lcd.setCursor(0, 1);
-                        lcd.print("Era facil essa");
+                        lcd.print("Errou!");
 
                         estado = 120;
                         delay(3000);
                     }
-                } else {
-                    lcd.clear();
-                    lcd.setCursor(0, 0);
-                    lcd.print("Voce pulou essa!!");
-                    lcd.setCursor(0, 1);
-                    lcd.print("Era taum facil!!!");
-
-                    estado = 120;
-                    delay(3000);
-                }
-            } else if (botao == "Esquerda") {
-                estado = 110;
+                } 
             } else if (botao != "vazio") {
                 teclaError();
             }
@@ -210,24 +201,20 @@ void loop() {
         case 120:
             lcd.clear();
             lcd.setCursor(0, 0);
-            lcd.print("Quiz 2:");
+            lcd.print("Q2: Qual a escritora");
             lcd.setCursor(0, 1);
-            lcd.print("O Lula eh inocente?");
+            lcd.print("do Pequeno Manual");
+            lcd.setCursor(0, 2);
+            lcd.print("Antirracista?");
 
-            delay(2000);
-
-            for (int cont = 0; cont < 3; cont++) {
-                lcd.scrollDisplayLeft();
-                delay(200);
-            }
-
-            delay(2000);
+            delay(6000);
 
             lcd.clear();
             lcd.setCursor(0, 0);
-            lcd.print("SIM ()");
-            lcd.setCursor(0, 1);
-            lcd.print("NAO ()");
+            lcd.print("() Djamila Ribeiro");
+
+            lcd.setCursor(0, 2);
+            lcd.print("() Chimamanda Adichie");
 
             delay(200);
             estado = 121;
@@ -241,9 +228,9 @@ void loop() {
             if (botao == "Cima") {
                 lcd.clear();
                 lcd.setCursor(0, 0);
-                lcd.print("SIM (X)");
+                lcd.print("(X) Djamila Ribeiro");
                 lcd.setCursor(0, 1);
-                lcd.print("NAO ()");
+                lcd.print("() Chimamanda Adichie");
 
                 flag = true;
                 aux++;
@@ -251,9 +238,9 @@ void loop() {
             } else if (botao == "Baixo") {
                 lcd.clear();
                 lcd.setCursor(0, 0);
-                lcd.print("SIM ()");
+                lcd.print("() Djamila Ribeiro");
                 lcd.setCursor(0, 1);
-                lcd.print("NAO (X)");
+                lcd.print("(X) Chimamanda Adichie");
 
                 flag = false;
                 aux++;
@@ -263,9 +250,246 @@ void loop() {
                     if (flag == true) {
                         lcd.clear();
                         lcd.setCursor(0, 0);
-                        lcd.print("Acertou! Vc");
-                        lcd.setCursor(0, 1);
-                        lcd.print("Esta Triste?");
+                        lcd.print("Acertou!");
+
+                        ponto++;
+                        estado = 130;
+                        delay(3000);
+                    }
+
+                    if (flag == false) {
+                        lcd.clear();
+                        lcd.setCursor(0, 0);
+                        lcd.print("Errou!");
+
+                        estado = 130;
+                        delay(3000);
+                    }
+                } 
+            } else if (botao != "vazio") {
+                teclaError();
+            }
+
+            break;
+            
+        case 130:            
+            lcd.clear();
+            lcd.setCursor(0, 0);
+            lcd.print("Q3: Triste Fim de");
+            lcd.setCursor(0, 1);
+            lcd.print("Policarpo Quaresma");
+            lcd.setCursor(0, 2);
+            lcd.print("eh uma obras litera");
+            lcd.setCursor(0, 3);
+            lcd.print("rias do escritor:");
+
+            delay(6000);
+
+            lcd.clear();
+            lcd.setCursor(0, 0);
+            lcd.print("() Lima Barreto");
+
+            lcd.setCursor(0, 2);
+            lcd.print("() Guimaraes Rosa");
+
+            delay(200);
+            estado = 131;
+            aux = 0;
+
+            break;
+
+        case 131:
+            lerBotoes();
+
+            if (botao == "Cima") {
+                lcd.clear();
+                lcd.setCursor(0, 0);
+                lcd.print("(X) Lima Barreto");
+                lcd.setCursor(0, 1);
+                lcd.print("() Guimaraes Rosa");
+
+                flag = true;
+                aux++;
+
+            } else if (botao == "Baixo") {
+                lcd.clear();
+                lcd.setCursor(0, 0);
+                lcd.print("() Lima Barreto");
+                lcd.setCursor(0, 1);
+                lcd.print("(X) Guimaraes Rosa");
+
+                flag = false;
+                aux++;
+
+            } else if (botao == "Select") {
+                if (aux != 0) {
+                    if (flag == true) {
+                        lcd.clear();
+                        lcd.setCursor(0, 0);
+                        lcd.print("Acertou! ");
+
+                        ponto++;
+                        estado = 140;
+                        delay(3000);
+                    }
+
+                    if (flag == false) {
+                        lcd.clear();
+                        lcd.setCursor(0, 0);
+                        lcd.print("Errou!");
+
+
+                        estado = 140;
+                        delay(3000);
+                    }
+                } 
+            } else if (botao != "vazio") {
+                teclaError();
+            }
+
+            break;
+
+        case 140: 
+            lcd.clear();
+            lcd.setCursor(0, 0);
+            lcd.print("Q4: Os albuns");
+            lcd.setCursor(0, 1);
+            lcd.print("Um Banda Um, Realce");
+            lcd.setCursor(0, 2);
+            lcd.print("e Refavela sao de");
+            lcd.setCursor(0, 3);
+            lcd.print("que artista?");
+
+            delay(6000);
+
+            lcd.clear();
+            lcd.setCursor(0, 0);
+            lcd.print("() Gilberto Gil");
+
+            lcd.setCursor(0, 2);
+            lcd.print("() Jorge Ben Jor");
+
+            delay(200);
+            estado = 141;
+            aux = 0;
+
+            break;
+
+        case 141:
+            lerBotoes();
+
+            if (botao == "Cima") {
+                lcd.clear();
+                lcd.setCursor(0, 0);
+                lcd.print("(X) Gilberto Gil");
+                lcd.setCursor(0, 1);
+                lcd.print("() Jorge Ben Jor");
+
+                flag = true;
+                aux++;
+
+            } else if (botao == "Baixo") {
+                lcd.clear();
+                lcd.setCursor(0, 0);
+                lcd.print("() Gilberto Gil");
+                lcd.setCursor(0, 1);
+                lcd.print("(X) Jorge Ben Jor");
+
+                flag = false;
+                aux++;
+
+            } else if (botao == "Select") {
+                if (aux != 0) {
+                    if (flag == true) {
+                        lcd.clear();
+                        lcd.setCursor(0, 0);
+                        lcd.print("Acertou! ");
+
+                        ponto++;
+                        estado = 170;
+                        delay(3000);
+                    }
+
+                    if (flag == false) {
+                        lcd.clear();
+                        lcd.setCursor(0, 0);
+                        lcd.print("Errou!");
+
+
+                        estado = 170;
+                        delay(3000);
+                    }
+                } 
+            } else if (botao != "vazio") {
+                teclaError();
+            }
+
+            break;
+
+        case 170:
+            lcd.clear();
+            lcd.setCursor(0, 0);
+            lcd.print("Q5: Qual album fez");
+            lcd.setCursor(0, 1);
+            lcd.print("dos Racionais");
+            lcd.setCursor(0, 2);
+            lcd.print("doutores pela honra?");
+
+            delay(6000);
+
+            lcd.clear();
+            lcd.setCursor(0, 0);
+            lcd.print("() Transpiracao Continua");
+            lcd.setCursor(0, 1);
+            lcd.print("Prolongada, 1996");
+            lcd.setCursor(0, 2);
+            lcd.print("() Sobrevivendo no");
+            lcd.setCursor(0, 3);
+            lcd.print("Inferno, 1997");          
+
+            delay(200);
+            estado = 171;
+            aux = 0;
+
+            break;
+
+        case 171:
+            lerBotoes();
+
+            if (botao == "Cima") {
+                lcd.clear();
+                lcd.setCursor(0, 0);
+                lcd.print("(X) Transpiracao Continua");
+                lcd.setCursor(0, 1);
+                lcd.print("Prolongada, 1996");
+                lcd.setCursor(0, 2);
+                lcd.print("() Sobrevivendo no");
+                lcd.setCursor(0, 3);
+                lcd.print("Inferno, 1997");
+
+                flag = false;
+                aux++;
+
+            } else if (botao == "Baixo") {
+                lcd.clear();
+                lcd.setCursor(0, 0);
+                lcd.print("() Transpiracao Continua");
+                lcd.setCursor(0, 1);
+                lcd.print("Prolongada, 1996");
+                lcd.setCursor(0, 2);
+                lcd.print("(X) Sobrevivendo no");
+                lcd.setCursor(0, 3);
+                lcd.print("Inferno, 1997");
+
+                flag = true;
+                aux++;
+
+            } else if (botao == "Select") {
+                if (aux != 0) {
+                    if (flag == true) {
+                        lcd.clear();
+                        lcd.setCursor(0, 0);
+                        lcd.print("Acertou!");
 
                         ponto++;
                         estado = 4;
@@ -275,55 +499,93 @@ void loop() {
                     if (flag == false) {
                         lcd.clear();
                         lcd.setCursor(0, 0);
-                        lcd.print("Esse Jogo foi");
-                        lcd.setCursor(0, 1);
-                        lcd.print("Punido pelo STF");
+                        lcd.print("Errou!");
+
 
                         estado = 4;
                         delay(3000);
                     }
-                } else {
-                    lcd.clear();
-                    lcd.setCursor(0, 0);
-                    lcd.print("Voce pulou essa!!");
-                    lcd.setCursor(0, 1);
-                    lcd.print("Era taum facil!!!");
-
-                    estado = 4;
-                    delay(3000);
-                }
-            } else if (botao == "Esquerda") {
-                estado = 120;
+                } 
             } else if (botao != "vazio") {
                 teclaError();
             }
 
-            break;
+            break;            
 
         case 4:
+            mostrarMenu();
+            estado = 5;
+            delay(200);
+            break;
+
+        case 5:
+            lerBotoes();
+
+            if (botao == "Cima") {
+                menuIndex = (menuIndex - 1 + 3) % 3;
+                mostrarMenu();
+                delay(200);
+            } else if (botao == "Baixo") {
+                menuIndex = (menuIndex + 1) % 3;
+                mostrarMenu();
+                delay(200);
+            } else if (botao == "Select") {
+                if (menuIndex == 0) {
+                    lcd.clear();
+                    lcd.setCursor(0, 0);
+                    lcd.print("Frantz Fanon");
+                    lcd.setCursor(0, 1);
+                    lcd.print("Lelia Gonzalez");
+                    lcd.setCursor(0, 2);
+                    lcd.print("Achille Mbembe");
+                    lcd.setCursor(0, 3);
+                    lcd.print("Cida Bento");
+
+                    delay(6000);
+
+                } else if (menuIndex == 1) {
+                    lcd.clear();
+                    lcd.setCursor(0, 0);
+                    lcd.print("Cassiano");
+                    lcd.setCursor(0, 1);
+                    lcd.print("Luedji Luna");
+                    lcd.setCursor(0, 2);
+                    lcd.print("Larissa Luz");
+                    lcd.setCursor(0, 3);
+                    lcd.print("Dona Ivone Lara");
+
+                    delay(6000);
+
+                } else if (menuIndex == 2) {
+
+                    lcd.clear();
+                    lcd.setCursor(0, 0);
+                    lcd.print("Sabrina Fidalgo");
+                    lcd.setCursor(0, 1);
+                    lcd.print("Adelia Sampaio");
+                    lcd.setCursor(0, 2);
+                    lcd.print("Gabriel Martins");
+                    lcd.setCursor(0, 3);
+                    lcd.print("Marlon Riggs");
+
+                    delay(6000);
+
+                }
+                estado = 20;
+                delay(200);
+            } else if (botao != "vazio") {
+                teclaError();
+            }
+            break;
+
+        case 20:
             lcd.clear();
             lcd.setCursor(0, 0);
-            lcd.print("Total: ");
-            lcd.setCursor(7, 0);
-            lcd.print(ponto);
-            lcd.setCursor(9, 0);
-            lcd.print("Pto");
-
-            if (ponto >= 1) {
-                lcd.setCursor(0, 1);
-                lcd.print("Muito Bom - MB");
-            }
-
-            if (ponto < 1) {
-                lcd.setCursor(0, 1);
-                lcd.print("Voce eh Burro ");
-            }
-
-            estado = 1;
-            ponto = 0;
+            lcd.print("Volte sempre! <3");
 
             delay(3000);
-
+            estado = 1;
+            ponto = 0;
             break;
     }
 }
@@ -331,9 +593,9 @@ void loop() {
 void teclaError() {
     lcd.clear();
     lcd.setCursor(0, 0);
-    lcd.print(" Tecla Errada!! ");
-    delay(1000)
-    ;}
-    
+    lcd.print("Tecla Invalida");
+    delay(500);
+}
+
 
 
